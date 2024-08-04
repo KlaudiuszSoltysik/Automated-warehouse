@@ -1,0 +1,1 @@
+ C:\\Users\\klaud\\Documents\\DEVELOPMENT\\automated_warehouse\\mobile_app\\.dart_tool\\flutter_build\\3142e0aefc6c109aea19bf0b76ed7baa\\native_assets.yaml: 
