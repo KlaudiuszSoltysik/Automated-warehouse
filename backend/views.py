@@ -15,10 +15,12 @@ class MagazinesView(APIView):
 
 class OrderSizeView(APIView):
     def post(self, request, *args, **kwargs):
-        status = order_size(request.data["size"])
-        return Response({"status": status})
+        if order_size(request.data["size"]):
+            return Response(status=status.HTTP_200_OK)
+        return(Response(status=status.HTTP_400_BAD_REQUEST))
     
 class OrderBoxView(APIView):
     def post(self, request, *args, **kwargs):
-        status = order_box(request.data["magazine"], request.data["id"]) 
-        return Response({"status": status})
+        if order_box(request.data["magazine"], request.data["id"]):
+            return Response(status=status.HTTP_200_OK)
+        return(Response(status=status.HTTP_400_BAD_REQUEST))

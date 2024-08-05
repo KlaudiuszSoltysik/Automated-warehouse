@@ -30,6 +30,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // static const String serverAddress = "192.168.33.9:8000";
+  static const String serverAddress = "10.0.2.2:8000";
   Timer? _timer;
   Map<String, dynamic> _data = {};
   Magazine magazine1 = Magazine();
@@ -221,7 +223,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getMagazines() async {
-    const url = 'http://192.168.33.9:8000/magazines/';
+    const url = 'http://$serverAddress/magazines/';
 
     final response = await http.get(Uri.parse(url));
 
@@ -237,28 +239,46 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void postBoxOrder(int magazine, int id) async {
-    final url = Uri.parse('http://192.168.33.9:8000/order_box/');
+  void postBoxOrder(BuildContext context, int magazine, int id) async {
+    final url = Uri.parse('http://$serverAddress/order_box/');
 
     final data = jsonEncode({"magazine": magazine, "id": id});
 
-    await http.post(
+    final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
       body: data,
     );
+
+    if (context.mounted) {
+      if (response.statusCode == 200) {
+        showDialogMessage(context, "Success", "Order placed successfully.");
+      } else {
+        showDialogMessage(
+            context, "Fail", "Queue full. Failed to place order.");
+      }
+    }
   }
 
-  void postSizeOrder(int size) async {
-    final url = Uri.parse('http://192.168.33.9:8000/order_size/');
+  void postSizeOrder(BuildContext context, int size) async {
+    final url = Uri.parse('http://$serverAddress/order_size/');
 
     final data = jsonEncode({"size": size});
 
-    await http.post(
+    final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
       body: data,
     );
+
+    if (context.mounted) {
+      if (response.statusCode == 200) {
+        showDialogMessage(context, "Success", "Order placed successfully.");
+      } else {
+        showDialogMessage(
+            context, "Fail", "Queue full. Failed to place order.");
+      }
+    }
   }
 
   void showPopup1(BuildContext context, int magazine, Shelf shelf) {
@@ -371,7 +391,7 @@ class _HomePageState extends State<HomePage> {
               shelf.isOccupied
                   ? ElevatedButton(
                       onPressed: () {
-                        postBoxOrder(magazine, shelf.id);
+                        postBoxOrder(context, magazine, shelf.id);
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
@@ -443,11 +463,11 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       if (dropdownValue != '-') {
                         if (dropdownValue == 'S') {
-                          postSizeOrder(1);
+                          postSizeOrder(context, 1);
                         } else if (dropdownValue == 'M') {
-                          postSizeOrder(2);
+                          postSizeOrder(context, 2);
                         } else if (dropdownValue == 'L') {
-                          postSizeOrder(3);
+                          postSizeOrder(context, 3);
                         }
                       }
                       Navigator.of(context).pop();
@@ -470,6 +490,42 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           },
+        );
+      },
+    );
+  }
+
+  void showDialogMessage(BuildContext context, String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey[800],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
