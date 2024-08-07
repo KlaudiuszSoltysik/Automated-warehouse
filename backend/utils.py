@@ -41,7 +41,7 @@ def read_data():
         return json.dumps({'magazine1': magazine1, 'magazine2': magazine2})
     return json.dumps({'magazine1': [], 'magazine2': []})
 
-def order_box(magazine, id):
+def order_box(id, magazine):
     global lock
     lock = True
 
@@ -49,13 +49,18 @@ def order_box(magazine, id):
 
     data = client.db_read(db_number, 668, 36)
 
-    for i in range(5):
+    for i in range(6):
         base = 6 * i
 
-        id2 = get_int(data, base)
+        ID = get_int(data, base)
         box_size = get_int(data, base + 4)
 
-        if id2 == 0 and box_size == 0:
+        if id == ID:
+            print(id)
+            print(ID)
+            break
+
+        if ID == 0 and box_size == 0:
             set_int(data, base, id)
             set_int(data, base + 2, magazine)
             client.db_write(db_number, 668, data)
@@ -78,10 +83,10 @@ def order_size(size):
     for i in range(5):
         base = 6 * i
 
-        id = get_int(data, base)
+        ID = get_int(data, base)
         box_size = get_int(data, base + 4)
 
-        if id == 0 and box_size == 0:
+        if ID == 0 and box_size == 0:
             set_int(data, base + 4, size)
             client.db_write(db_number, 668, data)
 

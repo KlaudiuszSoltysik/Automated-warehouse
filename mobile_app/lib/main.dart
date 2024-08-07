@@ -30,10 +30,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // static const String serverAddress = "192.168.33.9:8000";
-  static const String serverAddress = "10.0.2.2:8000";
+  // static const String serverAddress = '192.168.33.9:8000';
+  static const String serverAddress = '10.0.2.2:8000';
+  bool serverAvailable = false;
   Timer? _timer;
-  Map<String, dynamic> _data = {};
   Magazine magazine1 = Magazine();
   Magazine magazine2 = Magazine();
 
@@ -53,10 +53,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Material(
-      child: _data.isEmpty
-          ? serverStatusContainer(context)
-          : Container(
+    return serverAvailable
+        ? Material(
+            child: Container(
               color: Colors.grey[800],
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -161,59 +160,13 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-    );
-  }
-
-  Widget serverStatusContainer(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    return FutureBuilder<bool>(
-      future: isServerAvailable(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError || !snapshot.hasData || !snapshot.data!) {
-          return Container(
+          )
+        : Container(
             color: Colors.grey[800],
             child: const Center(
               child: DotAnimation(),
             ),
           );
-        } else {
-          return Container(
-            color: Colors.grey[800],
-            child: Center(
-              child: Text(
-                'Server available',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: screenWidth * 0.08,
-                ),
-              ),
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Future<bool> isServerAvailable() async {
-    final response =
-        await http.get(Uri.parse('https://your-backend-server.com/health'));
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> checkServer() async {
-    bool available = await isServerAvailable();
-
-    if (available) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   void startGettingMagazines() {
@@ -223,26 +176,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getMagazines() async {
-    const url = 'http://$serverAddress/magazines/';
+    try {
+      const url = 'http://$serverAddress/magazines/';
 
-    final response = await http.get(Uri.parse(url));
+      final response = await http.get(Uri.parse(url));
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          serverAvailable = true;
+          magazine1.updateFromMap(data['magazine1']);
+          magazine2.updateFromMap(data['magazine2']);
+        });
+      }
+    } catch (e) {
       setState(() {
-        _data = data;
-        magazine1.updateFromMap(data['magazine1']);
-        magazine2.updateFromMap(data['magazine2']);
+        serverAvailable = false;
       });
-    } else {
-      _data = {};
     }
   }
 
   void postBoxOrder(BuildContext context, int magazine, int id) async {
     final url = Uri.parse('http://$serverAddress/order_box/');
 
-    final data = jsonEncode({"magazine": magazine, "id": id});
+    final data = jsonEncode({'ID': id, 'magazine': magazine});
 
     final response = await http.post(
       url,
@@ -252,10 +209,10 @@ class _HomePageState extends State<HomePage> {
 
     if (context.mounted) {
       if (response.statusCode == 200) {
-        showDialogMessage(context, "Success", "Order placed successfully.");
+        showDialogMessage(context, 'Success', 'Order placed successfully.');
       } else {
         showDialogMessage(
-            context, "Fail", "Queue full. Failed to place order.");
+            context, 'Fail', 'Queue full. Failed to place order.');
       }
     }
   }
@@ -263,7 +220,7 @@ class _HomePageState extends State<HomePage> {
   void postSizeOrder(BuildContext context, int size) async {
     final url = Uri.parse('http://$serverAddress/order_size/');
 
-    final data = jsonEncode({"size": size});
+    final data = jsonEncode({'box_size': size});
 
     final response = await http.post(
       url,
@@ -273,10 +230,10 @@ class _HomePageState extends State<HomePage> {
 
     if (context.mounted) {
       if (response.statusCode == 200) {
-        showDialogMessage(context, "Success", "Order placed successfully.");
+        showDialogMessage(context, 'Success', 'Order placed successfully.');
       } else {
         showDialogMessage(
-            context, "Fail", "Queue full. Failed to place order.");
+            context, 'Fail', 'Queue full. Failed to place order.');
       }
     }
   }
@@ -566,11 +523,13 @@ class DotAnimationState extends State<DotAnimation>
         int dots = _animation.value;
         String dotString = '.' * dots;
         String spaceString = ' ' * (3 - dots);
-        return Text(
-          'Fetching data$dotString$spaceString',
+        return DefaultTextStyle(
           style: TextStyle(
             color: Colors.white,
             fontSize: MediaQuery.of(context).size.width * 0.08,
+          ),
+          child: Text(
+            'Fetching data$dotString$spaceString',
           ),
         );
       },
