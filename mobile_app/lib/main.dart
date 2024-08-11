@@ -30,8 +30,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // static const String serverAddress = '192.168.33.9:8000';
-  static const String serverAddress = '10.0.2.2:8000';
+  static const String serverAddress = '192.168.33.13:8000';
+  // static const String serverAddress = '10.0.2.2:8000';
   bool serverAvailable = false;
   Timer? _timer;
   Magazine magazine1 = Magazine();
