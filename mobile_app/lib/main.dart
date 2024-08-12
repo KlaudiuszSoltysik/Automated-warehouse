@@ -30,8 +30,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const String serverAddress = '192.168.33.13:8000';
-  // static const String serverAddress = '10.0.2.2:8000';
+  // static const String serverAddress = '192.168.33.13:8000';
+  static const String serverAddress = '10.0.2.2:8000';
   bool serverAvailable = false;
   Timer? _timer;
   Magazine magazine1 = Magazine();
@@ -54,111 +54,109 @@ class _HomePageState extends State<HomePage> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return serverAvailable
-        ? Material(
-            child: Container(
-              color: Colors.grey[800],
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  const SizedBox(
-                    height: 100,
-                  ),
-                  Center(
-                    child: Text(
-                      'MAGAZINE 1',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.08,
-                      ),
+        ? Container(
+            color: Colors.grey[800],
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                const SizedBox(
+                  height: 100,
+                ),
+                Center(
+                  child: Text(
+                    'MAGAZINE 1',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.08,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(10, 0, 10, 60),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 9,
-                        crossAxisSpacing: 6,
-                        mainAxisSpacing: 6,
-                      ),
-                      itemCount: 54,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onLongPress: () =>
-                              showPopup1(context, 1, magazine1.shelves[index]),
-                          child: Container(
-                            color: magazine1.shelves[index].isOccupied
-                                ? Colors.red
-                                : Colors.green,
-                          ),
-                        );
-                      },
+                ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 60),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 9,
+                      crossAxisSpacing: 6,
+                      mainAxisSpacing: 6,
                     ),
-                  ),
-                  Center(
-                    child: Text(
-                      'MAGAZINE 2',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.08,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 9,
-                        crossAxisSpacing: 6,
-                        mainAxisSpacing: 6,
-                      ),
-                      itemCount: 54,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onLongPress: () =>
-                              showPopup1(context, 2, magazine2.shelves[index]),
-                          child: Container(
-                            color: magazine2.shelves[index].isOccupied
-                                ? Colors.red
-                                : Colors.green,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(10, 60, 10, 100),
-                    child: SizedBox(
-                      height: screenWidth * 0.2,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          showPopup2(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                    itemCount: 54,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onLongPress: () =>
+                            showPopup1(context, 1, magazine1.shelves[index]),
+                        child: Container(
+                          color: magazine1.shelves[index].isOccupied
+                              ? Colors.red
+                              : Colors.green,
                         ),
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: Text(
-                            'ORDER',
-                            style: TextStyle(
-                              color: Colors.grey[800],
-                              fontSize: screenWidth * 0.1,
-                            ),
+                      );
+                    },
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    'MAGAZINE 2',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.08,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 9,
+                      crossAxisSpacing: 6,
+                      mainAxisSpacing: 6,
+                    ),
+                    itemCount: 54,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onLongPress: () =>
+                            showPopup1(context, 2, magazine2.shelves[index]),
+                        child: Container(
+                          color: magazine2.shelves[index].isOccupied
+                              ? Colors.red
+                              : Colors.green,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 60, 10, 100),
+                  child: SizedBox(
+                    height: screenWidth * 0.2,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showPopup2(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          'ORDER',
+                          style: TextStyle(
+                            color: Colors.grey[800],
+                            fontSize: screenWidth * 0.1,
                           ),
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           )
         : Container(
