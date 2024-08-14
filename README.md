@@ -13,7 +13,11 @@ The backend forwards the data block information to API endpoints and updates the
 
 ## Mobile application - Flutter
 The application displays the status of each storage area and can be used to place orders.
-![image](https://github.com/user-attachments/assets/84d6d232-22bf-46a0-bef0-b201beaecbbc)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/80d0d8e1-ede6-4194-bc3e-9214dd2c821e" alt="Screenshot 1" width="33%" />
+  <img src="https://github.com/user-attachments/assets/ea024967-8000-47b8-b3cd-802ed6ff5d7b" alt="Screenshot 2" width="33%" />
+  <img src="https://github.com/user-attachments/assets/a586d55a-b221-4571-8f19-bf5a8d65a239" alt="Screenshot 3" width="33%" />
+</p>
 
 ## Future Enhancements
 - Allow locking of one of the storage areas.
