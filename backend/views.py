@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .utils import read_data, order_box, order_size
+from .utils import read_data, order_box, order_size, update_magazine_locks
 import json
     
 class MagazinesView(APIView):
@@ -18,5 +18,11 @@ class OrderSizeView(APIView):
 class OrderBoxView(APIView):
     def post(self, request, *args, **kwargs):
         if order_box(request.data['ID'], request.data['magazine']):
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+class UpdateMagazineLocksView(APIView):
+    def post(self, request, *args, **kwargs):
+        if update_magazine_locks(request.data['magazine1_lock'], request.data['magazine2_lock']):
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)

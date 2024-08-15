@@ -33,6 +33,8 @@ class _HomePageState extends State<HomePage> {
   static const String serverAddress = '192.168.33.10:8000';
   // static const String serverAddress = '10.0.2.2:8000';
   bool serverAvailable = false;
+  bool magazine1Lock = false;
+  bool magazine2Lock = false;
   Timer? _timer;
   Magazine magazine1 = Magazine();
   Magazine magazine2 = Magazine();
@@ -92,6 +94,25 @@ class _HomePageState extends State<HomePage> {
                             color: magazine1.shelves[index].isOccupied
                                 ? Colors.red
                                 : Colors.green,
+                            child: magazine1.shelves[index].isOccupied
+                                ? Center(
+                                    child: Text(
+                                      (magazine1.shelves[index].boxSize == 1)
+                                          ? 'S'
+                                          : (magazine1.shelves[index].boxSize ==
+                                                  2)
+                                              ? 'M'
+                                              : (magazine1.shelves[index]
+                                                          .boxSize ==
+                                                      3)
+                                                  ? 'L'
+                                                  : '',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: screenWidth / 16),
+                                    ),
+                                  )
+                                : Container(),
                           ),
                         );
                       },
@@ -126,13 +147,32 @@ class _HomePageState extends State<HomePage> {
                             color: magazine2.shelves[index].isOccupied
                                 ? Colors.red
                                 : Colors.green,
+                            child: magazine2.shelves[index].isOccupied
+                                ? Center(
+                                    child: Text(
+                                      (magazine2.shelves[index].boxSize == 1)
+                                          ? 'S'
+                                          : (magazine2.shelves[index].boxSize ==
+                                                  2)
+                                              ? 'M'
+                                              : (magazine2.shelves[index]
+                                                          .boxSize ==
+                                                      3)
+                                                  ? 'L'
+                                                  : '',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: screenWidth / 16),
+                                    ),
+                                  )
+                                : Container(),
                           ),
                         );
                       },
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.fromLTRB(10, 60, 10, 100),
+                    margin: const EdgeInsets.fromLTRB(10, 60, 10, 45),
                     child: SizedBox(
                       height: screenWidth * 0.2,
                       child: ElevatedButton(
@@ -155,6 +195,50 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 100),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'MAGAZINE 1 LOCK',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenWidth * 0.08,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Switch(
+                          value: magazine1Lock,
+                          onChanged: (value) {
+                            setState(() {
+                              magazine1Lock = value;
+                            });
+                            postUpdateMagazineLocks(context, 1);
+                          },
+                          activeColor: Colors.grey[400],
+                        ),
+                        Text(
+                          'MAGAZINE 2 LOCK',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenWidth * 0.08,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Switch(
+                          value: magazine2Lock,
+                          onChanged: (value) {
+                            setState(() {
+                              magazine2Lock = value;
+                            });
+                            postUpdateMagazineLocks(context, 2);
+                          },
+                          activeColor: Colors.grey[400],
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -187,6 +271,8 @@ class _HomePageState extends State<HomePage> {
           serverAvailable = true;
           magazine1.updateFromMap(data['magazine1']);
           magazine2.updateFromMap(data['magazine2']);
+          magazine1Lock = data['magazine1_lock'];
+          magazine2Lock = data['magazine2_lock'];
         });
       }
     } catch (e) {
@@ -234,6 +320,49 @@ class _HomePageState extends State<HomePage> {
       } else {
         showDialogMessage(
             context, 'Fail', 'Queue full. Failed to place order.');
+      }
+    }
+  }
+
+  void postUpdateMagazineLocks(BuildContext context, int magazine) async {
+    final url = Uri.parse('http://$serverAddress/update_magazine_locks/');
+
+    final data = jsonEncode(
+        {'magazine1_lock': magazine1Lock, 'magazine2_lock': magazine2Lock});
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: data,
+    );
+
+    if (context.mounted) {
+      if (response.statusCode == 200) {
+        if (magazine == 1) {
+          if (magazine1Lock) {
+            showDialogMessage(context, 'Magazine 1 locked',
+                'Magazine 1 locked: $magazine1Lock\nMagazine 2 locked: $magazine2Lock');
+          } else {
+            showDialogMessage(context, 'Magazine 1 unlocked',
+                'Magazine 1 locked: $magazine1Lock\nMagazine 2 locked: $magazine2Lock');
+          }
+        } else if (magazine == 2) {
+          if (magazine2Lock) {
+            showDialogMessage(context, 'Magazine 2 locked',
+                'Magazine 1 locked: $magazine1Lock\nMagazine 2 locked: $magazine2Lock');
+          } else {
+            showDialogMessage(context, 'Magazine 2 unlocked',
+                'Magazine 1 locked: $magazine1Lock\nMagazine 2 locked: $magazine2Lock');
+          }
+        }
+      } else {
+        showDialogMessage(
+            context, 'Fail', 'Failed to lock/unlock magazine order.');
+        if (magazine == 1) {
+          magazine1Lock = !magazine1Lock;
+        } else if (magazine == 2) {
+          magazine2Lock = !magazine2Lock;
+        }
       }
     }
   }
