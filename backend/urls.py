@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from .views import MagazinesView, OrderSizeView, OrderBoxView, UpdateMagazineLocksView
+import snap7
 
 urlpatterns = [
     path('admin/', admin.site.urls),

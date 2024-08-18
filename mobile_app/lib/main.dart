@@ -30,8 +30,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const String serverAddress = '192.168.33.10:8000';
-  // static const String serverAddress = '10.0.2.2:8000';
+  // static const String serverAddress = '192.168.33.10:8000';
+  static const String serverAddress = '10.0.2.2:8000';
   bool serverAvailable = false;
   bool magazine1Lock = false;
   bool magazine2Lock = false;
@@ -264,7 +264,6 @@ class _HomePageState extends State<HomePage> {
       const url = 'http://$serverAddress/magazines/';
 
       final response = await http.get(Uri.parse(url));
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
