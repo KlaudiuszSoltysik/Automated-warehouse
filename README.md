@@ -1,5 +1,5 @@
 ﻿# Automated Warehouse
-This project simulates an automated warehouse equipped with two cranes and multiple conveyors. The warehouse operations are managed by a virtual SIMATIC S7-1500 PLC. The backend, built with Django Rest Framework, retrieves data from the PLC's data blocks and forwards this information to an API endpoints. A Flutter application consumes this API to display the warehouse status in real-time. Additionally, the mobile app allows users control magazine.
+This project is a comprehensive simulation of an automated warehouse designed to showcase the integration of industrial automation with modern web and mobile technologies. Inspired by Supervisory Control and Data Acquisition (SCADA) systems, I aimed to create a solution that monitors and controls warehouse operations in real-time, similar to how SCADA software supervises and manages industrial processes. The warehouse utilizes two cranes, multiple conveyors, RFID scanners, and sensors to simulate real-life logistics operations. This project demonstrates the interaction between a Programmable Logic Controller (virtual SIMATIC S7-1500) and external systems using a backend API (Django Rest Framework) and a mobile interface (Flutter), facilitating real-time monitoring and control.
 
 ## Simulation - FactoryIO
 The warehouse is built in FactoryIO with components such as conveyors, turnable conveyors, sensors, RFID scanners, and cranes.
@@ -22,4 +22,7 @@ The application displays the status of each storage area and can be used to plac
 </p>
 
 ## Future Enhancements
-- build a website
+- Web Interface
+- Analytics Dashboard
+- User Authentication
+- Notifications
