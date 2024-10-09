@@ -27,4 +27,4 @@ The application displays the status of each storage area and can be used to plac
 - User Authentication
 - Notifications
 
-Due to licensing issues and lack of time I couldn't finish this project. I'm leaving it done in 75%.
+Due to licensing issues and lack of time, I couldn't finish this project. I've completed about 75% of it.
