@@ -26,3 +26,5 @@ The application displays the status of each storage area and can be used to plac
 - Analytics Dashboard
 - User Authentication
 - Notifications
+
+Due to licensing issues and lack of time I couldn't finish this project. I'm leaving it done in 75%.
