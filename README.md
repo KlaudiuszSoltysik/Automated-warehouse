@@ -1,27 +1,39 @@
-﻿# Automated Warehouse
-This project is a comprehensive simulation of an automated warehouse designed to showcase the integration of industrial automation with modern web and mobile technologies. Inspired by Supervisory Control and Data Acquisition (SCADA) systems, I aimed to create a solution that monitors and controls warehouse operations in real-time, similar to how SCADA software supervises and manages industrial processes. The warehouse utilizes two cranes, multiple conveyors, RFID scanners, and sensors to simulate real-life logistics operations. This project demonstrates the interaction between a Programmable Logic Controller (virtual SIMATIC S7-1500) and external systems using a backend API (Django Rest Framework) and a mobile interface (Flutter), facilitating real-time monitoring and control.
+# 🏭 Automated Warehouse
 
-## Features
-- Intelligent sorting of boxes based on their size and warehouse status - TIA.
-- When an order is placed, the sorting process is interrupted, and the ordered box is moved to the pickup area - TIA.
-- Visualization of warehouse status through a dedicated application - Flutter.
-- Ability to place orders for specific boxes (using IDs read by RFID scanners and stored in a database) or for any box with specified size - Flutter.
-- The entire system has been thoroughly secured and tested to prevent undesirable behavior, ensuring it is error-free.
-  
-## Simulation - FactoryIO
-The warehouse is built in FactoryIO with components such as conveyors, turnable conveyors, sensors, RFID scanners, and cranes.
+A comprehensive proof-of-concept demonstrating the convergence of **Industrial Automation (OT)** and **Modern Software (IT)**. This project creates a Digital Twin of a logistics center where a virtual PLC controls physical machinery while communicating in real-time with a mobile app via a REST API bridge.
+
+## ⚙️ Architecture & Core Mechanics
+
+The system moves beyond simple simulation by implementing a full data pipeline:
+
+- **🧠 Industrial Brain (PLC):** A virtual **SIMATIC S7-1500** controller runs the logic for cranes, conveyors, and sorters.
+- **bridge Middleware (Python):** A **Django Rest Framework** service acts as a gateway, translating raw PLC memory data (Data Blocks) into JSON format.
+- **📱 Human-Machine Interface (Mobile):** A **Flutter** app replaces traditional HMI panels, allowing remote monitoring and order placement.
+
+## 🚀 Technical Highlights
+
+### 🤖 PLC Logic (TIA Portal & FactoryIO)
+Control software written in **LAD, SCL, and GRAPH**, adhering to industrial programming standards.
+- **Smart Sorting:** Dynamic algorithms route boxes based on size and warehouse capacity.
+- **RFID Tracking:** Integration with simulated RFID scanners to manage inventory IDs.
+- **Safety & Error Handling:** Robust state machine logic prevents collisions and handles unexpected interruptions.
+
+### 🌐 Backend & Connectivity (Python)
+- **Data Exposure:** Exposes PLC variables to external systems via REST endpoints.
+- **Order Management:** Translates HTTP requests from the mobile app into boolean triggers within the PLC memory.
+
+### 📱 Mobile App (Flutter)
+- **Real-Time Visualization:** Displays live occupancy status of storage slots.
+- **Remote Control:** Allows users to request specific items (by ID) or general product types, overriding the automatic sorting process.
+
+## 📸 Visualization
+
+### Simulation Environment (FactoryIO)
 ![image](https://github.com/user-attachments/assets/d13e4e2f-b4e3-4b0b-a297-d436e857a2ff)
 
-## PLC - TIA Portal
-The PLC program is written in LAD, SCL, and GRAPH languages. Good programming practices were taken care of. All boxes are sorted by size to maintain an equal number of each size in both storage areas. An RFID scanner reads the RFID tag data of each box. The crane then places the box in the first available slot. Users can order a specific box by its ID or by size, and the program will select the appropriate box for unloading. Program is protected against errors and unexpected behaviour. In service mode all boxes are directed to working magazine.
-
-## Backend - Django Rest Framework
-Works as a bridge. The backend forwards the TIA data block information to API and order data from another endpoint to the TIA project.
-
-## Mobile application - Flutter
-The application displays the status of each storage area and can be used to place orders.
+### Mobile Interface
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/80d0d8e1-ede6-4194-bc3e-9214dd2c821e" alt="Screenshot 1" width="33%" />
-  <img src="https://github.com/user-attachments/assets/ea024967-8000-47b8-b3cd-802ed6ff5d7b" alt="Screenshot 2" width="33%" />
-  <img src="https://github.com/user-attachments/assets/a586d55a-b221-4571-8f19-bf5a8d65a239" alt="Screenshot 3" width="33%" />
+  <img src="https://github.com/user-attachments/assets/80d0d8e1-ede6-4194-bc3e-9214dd2c821e" width="32%" />
+  <img src="https://github.com/user-attachments/assets/ea024967-8000-47b8-b3cd-802ed6ff5d7b" width="32%" />
+  <img src="https://github.com/user-attachments/assets/a586d55a-b221-4571-8f19-bf5a8d65a239" width="32%" />
 </p>
